@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  ollama-proxy:
+    # Replace with your Harbor registry details
+    image: ${HARBOR_REGISTRY:-harbor.example.com}/${HARBOR_PROJECT:-project}/ollama-proxy:${IMAGE_TAG:-latest}
+    
+    container_name: ollama-proxy
+    
+    ports:
+      - "${PROXY_PORT:-8080}:8080"
+    
+    environment:
+      # Ollama upstream URL
+      - UPSTREAM=${UPSTREAM:-http://host.docker.internal:11434}
+      
+      # API Key for authentication
+      - PROXY_API_KEY=${PROXY_API_KEY:-ollama-local}
+      
+      # Model configuration
+      - PROXY_BASE_MODEL=${PROXY_BASE_MODEL:-gpt-oss:20b}
+      - PROXY_TITLE_MODEL=${PROXY_TITLE_MODEL:-granite3.1-moe:1b}
+      
+      # Timeout settings
+      - PROXY_TIMEOUT=${PROXY_TIMEOUT:-300.0}
+      - PROXY_CONNECT_TIMEOUT=${PROXY_CONNECT_TIMEOUT:-10.0}
+      
+      # CORS configuration
+      - PROXY_CORS_ALLOW_ORIGINS=${PROXY_CORS_ALLOW_ORIGINS:-*}
+    
+    # Use env_file if you prefer loading from .env
+    # env_file:
+    #   - .env
+    
+    restart: unless-stopped
+    
+    healthcheck:
+      test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8080/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    
+    # Uncomment if running Ollama in the same docker-compose stack
+    # depends_on:
+    #   - ollama
+    
+    networks:
+      - ollama-network
+
+  # Uncomment to run Ollama alongside the proxy
+  # ollama:
+  #   image: ollama/ollama:latest
+  #   container_name: ollama
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama-data:/root/.ollama
+  #   networks:
+  #     - ollama-network
+  #   restart: unless-stopped
+
+networks:
+  ollama-network:
+    driver: bridge
+
+# Uncomment if using Ollama service above
+# volumes:
+#   ollama-data:
