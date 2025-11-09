@@ -96,23 +96,23 @@ gh run download RUN_ID
 
 ```bash
 # Login to Harbor
-docker login harbor.example.com
+docker login container.hect.dev
 
 # Pull latest image
-docker pull harbor.example.com/project/ollama-proxy:latest
+docker pull container.hect.dev/affine/ollama-proxy:latest
 
 # Pull specific version
-docker pull harbor.example.com/project/ollama-proxy:v1.0.0
+docker pull container.hect.dev/affine/ollama-proxy:v1.0.0
 
 # Pull auto-versioned build
-docker pull harbor.example.com/project/ollama-proxy:0.1.42
+docker pull container.hect.dev/affine/ollama-proxy:0.1.42
 
 # Pull by commit SHA
-docker pull harbor.example.com/project/ollama-proxy:sha-abc123def
+docker pull container.hect.dev/affine/ollama-proxy:sha-abc123def
 
 # List tags via API (requires auth)
 curl -u "username:password" \
-  https://harbor.example.com/api/v2.0/projects/project/repositories/ollama-proxy/artifacts
+  https://container.hect.dev/api/v2.0/projects/affine/repositories/ollama-proxy/artifacts
 ```
 
 ## Local Development Workflow
@@ -121,10 +121,8 @@ curl -u "username:password" \
 
 ```bash
 # Set GitHub secrets via CLI
-gh secret set HARBOR_REGISTRY
 gh secret set HARBOR_USERNAME
 gh secret set HARBOR_PASSWORD
-gh secret set HARBOR_PROJECT
 
 # List current secrets
 gh secret list
@@ -204,8 +202,8 @@ gh release create v1.1.0 --title "Version 1.1.0" --notes "
 - Bug fix C
 
 ## Docker Images
-- \`docker pull harbor.example.com/project/ollama-proxy:v1.1.0\`
-- \`docker pull harbor.example.com/project/ollama-proxy:0.1.50\`
+- \`docker pull container.hect.dev/affine/ollama-proxy:v1.1.0\`
+- \`docker pull container.hect.dev/affine/ollama-proxy:0.1.50\`
 
 ## Notes
 - Tests run first and must pass before Docker builds
@@ -222,7 +220,7 @@ gh release create v1.1.0 --title "Version 1.1.0" --notes "
 
 ## Useful Docker URLs
 
-- Harbor UI: `https://harbor.example.com/harbor/projects/PROJECT_ID/repositories/ollama-proxy`
+- Harbor UI: `https://container.hect.dev/harbor/projects/affine/repositories/ollama-proxy`
 
 ## Common Issues
 

@@ -33,10 +33,10 @@ You'll need to configure the following secrets in your GitHub repository:
 
 | Secret Name | Description | Example |
 |------------|-------------|---------|
-| `HARBOR_REGISTRY` | Your Harbor registry URL | `harbor.example.com` |
 | `HARBOR_USERNAME` | Harbor username | `admin` or your user |
 | `HARBOR_PASSWORD` | Harbor password or robot token | Use robot account for better security |
-| `HARBOR_PROJECT` | Harbor project name | `my-project` |
+
+**Note:** The workflow is pre-configured to push to `container.hect.dev/affine/ollama-proxy`
 
 ## Setup Instructions
 
@@ -50,18 +50,16 @@ You'll need to configure the following secrets in your GitHub repository:
 
 ### 2. Configure Harbor
 
-1. Log in to your Harbor instance
-2. Create a project (e.g., `ollama` or `ai-services`)
+1. Log in to your Harbor instance at `container.hect.dev`
+2. Make sure the `affine` project exists
 3. Create a **Robot Account** (recommended):
    - Go to Project → Robot Accounts → New Robot Account
    - Give it a name (e.g., `github-actions`)
    - Set expiration and permissions (Push artifact, Pull artifact)
    - Copy the token
 4. Add secrets to GitHub:
-   - `HARBOR_REGISTRY`: Your Harbor URL (e.g., `harbor.example.com`)
    - `HARBOR_USERNAME`: Robot account name (e.g., `robot$github-actions`)
    - `HARBOR_PASSWORD`: Robot account token
-   - `HARBOR_PROJECT`: Your project name (e.g., `ollama`)
 
 ### 3. Configure Coverage Badge (Optional)
 
@@ -151,11 +149,11 @@ For detailed coverage reports:
 ### Pull from Harbor
 
 ```bash
-docker pull harbor.example.com/your-project/ollama-proxy:latest
-docker run -p 8080:8080 --env-file .env harbor.example.com/your-project/ollama-proxy:latest
+docker pull container.hect.dev/affine/ollama-proxy:latest
+docker run -p 8080:8080 --env-file .env container.hect.dev/affine/ollama-proxy:latest
 
 # Or pull a specific version
-docker pull harbor.example.com/your-project/ollama-proxy:0.1.123
+docker pull container.hect.dev/affine/ollama-proxy:0.1.123
 ```
 
 ### Using docker-compose
@@ -167,7 +165,7 @@ version: '3.8'
 
 services:
   ollama-proxy:
-    image: harbor.example.com/your-project/ollama-proxy:latest
+    image: container.hect.dev/affine/ollama-proxy:latest
     ports:
       - "8080:8080"
     environment:
@@ -221,7 +219,7 @@ Go to your repository → **Actions** tab to see all workflow runs, logs, and ar
 
 ### Verify Docker Images
 
-- **Harbor**: `https://harbor.example.com/harbor/projects/PROJECT_ID/repositories`
+- **Harbor**: `https://container.hect.dev/harbor/projects/affine/repositories/ollama-proxy`
 
 ## Troubleshooting
 
@@ -236,15 +234,14 @@ Check the Actions tab for detailed logs. Common issues:
 
 Common issues:
 - Missing secrets (check Settings → Secrets)
-- Invalid Harbor registry URL (should not include `https://`)
 - Registry authentication errors (verify credentials)
 - Network issues (retry the workflow)
 
 ### Harbor-Specific Issues
 
-- **401 Unauthorized**: Check robot account permissions
-- **404 Project Not Found**: Verify `HARBOR_PROJECT` secret matches project name
-- **Certificate errors**: Your Harbor instance may need additional setup for self-signed certs
+- **401 Unauthorized**: Check robot account permissions on the `affine` project
+- **404 Project Not Found**: Ensure the `affine` project exists in Harbor
+- **Certificate errors**: If using self-signed certs, may need additional setup
 
 ## Minimal Setup (Just Tests)
 
