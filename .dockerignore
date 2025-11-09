@@ -1,0 +1,8 @@
+.git
+__pycache__/
+.pytest_cache/
+.env
+.coverage
+.archive/
+tests/
+ollama-proxy-env/
