@@ -2,7 +2,7 @@
 
 ![Tests](https://github.com/hectorandac/affine-ollama-proxy/workflows/Test%20and%20Coverage/badge.svg)
 ![Docker Build](https://github.com/hectorandac/affine-ollama-proxy/workflows/Docker%20Build%20and%20Push/badge.svg)
-![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen)
+![Coverage](https://img.shields.io/badge/coverage-%E2%86%91%2090%25-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 FastAPI service that speaks the OpenAI Responses, OpenAI Chat Completions and Anthropic Messages APIs while executing the requests against a local Ollama instance. Drop it in front of AFFiNE (or any OpenAI-compatible client) to keep using your own models without sending data to paid SaaS providers.
