@@ -19,19 +19,39 @@ docker buildx build --platform linux/amd64,linux/arm64 -t ollama-proxy:test .
 ## Triggering Workflows
 
 ```bash
-# Regular push (triggers tests + Docker build)
+# Regular push (triggers tests, then Docker build with auto-version)
 git add .
 git commit -m "Your changes"
 git push origin main
+# This will create tags: latest, 0.1.X, sha-<commit>
 
-# Create a release (triggers tests + Docker build with version tags)
+# Create a release (triggers tests + Docker build with semantic version tags)
 git tag -a v1.0.0 -m "Release v1.0.0"
 git push origin v1.0.0
+# This will create tags: v1.0.0, 1.0, 1
 
 # Push to a feature branch (triggers tests only via PR)
 git checkout -b feature/my-feature
 git push origin feature/my-feature
-# Then create a PR on GitHub
+# Then create a PR on GitHub - only runs tests, no Docker build
+```
+
+## Auto-Versioning
+
+Every push to main generates an auto-incrementing version based on the GitHub Actions run number:
+
+```bash
+# First push to main: 0.1.1
+# Second push: 0.1.2
+# Third push: 0.1.3
+# etc.
+```
+
+You can pull specific versions:
+```bash
+docker pull harbor.example.com/project/ollama-proxy:latest
+docker pull harbor.example.com/project/ollama-proxy:0.1.42
+docker pull harbor.example.com/project/ollama-proxy:sha-abc123
 ```
 
 ## Manually Trigger Workflows
@@ -83,6 +103,12 @@ docker pull harbor.example.com/project/ollama-proxy:latest
 
 # Pull specific version
 docker pull harbor.example.com/project/ollama-proxy:v1.0.0
+
+# Pull auto-versioned build
+docker pull harbor.example.com/project/ollama-proxy:0.1.42
+
+# Pull by commit SHA
+docker pull harbor.example.com/project/ollama-proxy:sha-abc123def
 
 # List tags via API (requires auth)
 curl -u "username:password" \
@@ -179,6 +205,12 @@ gh release create v1.1.0 --title "Version 1.1.0" --notes "
 
 ## Docker Images
 - \`docker pull harbor.example.com/project/ollama-proxy:v1.1.0\`
+- \`docker pull harbor.example.com/project/ollama-proxy:0.1.50\`
+
+## Notes
+- Tests run first and must pass before Docker builds
+- Each main branch push gets an auto-incrementing version (0.1.X)
+- Use semantic version tags (v1.0.0) for official releases
 "
 ```
 
