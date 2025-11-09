@@ -19,13 +19,15 @@ You'll need to configure the following secrets in your GitHub repository:
 
 ## Required Secrets
 
-### For Test & Coverage
+### For Test & Coverage (All Optional)
 
 | Secret Name | Description | How to Get |
 |------------|-------------|------------|
 | `CODECOV_TOKEN` | (Optional) Codecov integration token | Sign up at [codecov.io](https://codecov.io) and get your repo token |
 | `GIST_SECRET` | (Optional) GitHub PAT for coverage badge | Create at Settings → Developer settings → Personal access tokens (classic) with `gist` scope |
 | `GIST_ID` | (Optional) Gist ID for badge storage | Create a public gist, copy the ID from the URL |
+
+**Note:** The test workflow will run successfully without these secrets. They're only needed if you want coverage badges and Codecov integration. Missing secrets will be skipped gracefully.
 
 ### For Docker Publishing (Harbor)
 
