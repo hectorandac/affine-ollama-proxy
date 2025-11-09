@@ -95,6 +95,8 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
+        sbom: true
+        provenance: true
 
     - name: Sign container images with cosign
       env:
@@ -134,4 +136,9 @@ jobs:
         echo "cosign verify container.hect.dev/affine/${{ env.DOCKER_IMAGE_NAME }}:latest \\" >> $GITHUB_STEP_SUMMARY
         echo "  --certificate-identity-regexp=https://github.com/${{ github.repository }} \\" >> $GITHUB_STEP_SUMMARY
         echo "  --certificate-oidc-issuer=https://token.actions.githubusercontent.com" >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Inspect SBOM:" >> $GITHUB_STEP_SUMMARY
+        echo '```bash' >> $GITHUB_STEP_SUMMARY
+        echo "docker buildx imagetools inspect container.hect.dev/affine/${{ env.DOCKER_IMAGE_NAME }}:latest --format '{{ json .SBOM }}'" >> $GITHUB_STEP_SUMMARY
         echo '```' >> $GITHUB_STEP_SUMMARY
