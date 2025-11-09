@@ -112,24 +112,37 @@ For detailed coverage reports:
 - Comments on PRs with coverage report (if configured)
 - Uploads HTML coverage report as artifact (main branch only)
 
+**Important:** This workflow runs independently and doesn't block Docker builds.
+
 ### Docker Build and Push Workflow
 
 **Triggers:**
-- Push to `main` branch → builds `latest` and `main-<sha>` tags
+- Push to `main` branch → builds `latest` and auto-versioned tags (e.g., `0.1.123`)
 - Push tags matching `v*.*.*` → builds version tags (e.g., `v1.0.0`, `1.0`, `1`)
-- Pull requests → builds but doesn't push (testing only)
+- Pull requests → runs tests only (no Docker build)
 
 **Actions:**
+- Runs full test suite first (must pass before building)
+- Generates auto-incrementing version tag using GitHub run number (format: `0.1.RUN_NUMBER`)
 - Builds multi-architecture images (amd64, arm64)
 - Pushes to Harbor registry
 - Uses layer caching for faster builds
 
-**Generated Tags:**
-- `latest` - Latest main branch build
-- `main-<sha>` - Specific commit from main
-- `v1.2.3` - Semantic version tags
-- `1.2` - Major.minor tags
-- `1` - Major version tags
+**Important:** 
+- Docker build only happens on push to `main` (not on PRs)
+- Tests must pass before Docker images are built
+- Each successful main branch build gets a unique auto-incrementing version tag
+- Version numbers persist across the lifetime of the repository (never reset)
+
+**Generated Tags (on main branch):**
+- `latest` - Always points to the latest main branch build
+- `0.1.X` - Auto-incrementing version (X = GitHub Actions run number)
+- `sha-<commit>` - Specific commit SHA for traceability
+
+**Generated Tags (on version tags like v1.2.3):**
+- `v1.2.3` - Full semantic version
+- `1.2` - Major.minor version
+- `1` - Major version
 
 ## Usage Examples
 
@@ -138,6 +151,9 @@ For detailed coverage reports:
 ```bash
 docker pull harbor.example.com/your-project/ollama-proxy:latest
 docker run -p 8080:8080 --env-file .env harbor.example.com/your-project/ollama-proxy:latest
+
+# Or pull a specific version
+docker pull harbor.example.com/your-project/ollama-proxy:0.1.123
 ```
 
 ### Using docker-compose
@@ -180,11 +196,14 @@ git push origin v1.0.0
 ```
 
 This will create images tagged as:
-- `latest`
 - `v1.0.0`
 - `1.0`
 - `1`
-- `main-<sha>`
+
+For main branch pushes, you'll get:
+- `latest`
+- `0.1.X` (where X is the run number)
+- `sha-<commit>`
 
 ## Monitoring
 
