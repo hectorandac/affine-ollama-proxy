@@ -8,7 +8,7 @@ services:
     container_name: ollama-proxy
     
     ports:
-      - "${PROXY_PORT:-8080}:8080"
+      - "${PROXY_PORT:-8000}:8000"
     
     environment:
       # Ollama upstream URL
@@ -35,7 +35,7 @@ services:
     restart: unless-stopped
     
     healthcheck:
-      test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8080/health')"]
+      test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8000/health')"]
       interval: 30s
       timeout: 10s
       retries: 3

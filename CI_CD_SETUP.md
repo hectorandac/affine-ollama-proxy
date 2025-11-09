@@ -150,7 +150,7 @@ For detailed coverage reports:
 
 ```bash
 docker pull container.hect.dev/affine/ollama-proxy:latest
-docker run -p 8080:8080 --env-file .env container.hect.dev/affine/ollama-proxy:latest
+docker run -p 8000:8000 --env-file .env container.hect.dev/affine/ollama-proxy:latest
 
 # Or pull a specific version
 docker pull container.hect.dev/affine/ollama-proxy:0.1.123
@@ -167,7 +167,7 @@ services:
   ollama-proxy:
     image: container.hect.dev/affine/ollama-proxy:latest
     ports:
-      - "8080:8080"
+      - "8000:8000"
     environment:
       - UPSTREAM=http://host.docker.internal:11434
       - PROXY_API_KEY=your-secure-key

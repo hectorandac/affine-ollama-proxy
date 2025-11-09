@@ -46,7 +46,7 @@ FastAPI service that speaks the OpenAI Responses, OpenAI Chat Completions and An
 
 3. **Run locally**
    ```bash
-   uvicorn ollama_proxy.app:app --reload --port 8080
+   uvicorn ollama_proxy.app:app --reload --port 8000
    ```
 
 4. **Call the proxy**
@@ -65,7 +65,7 @@ pytest --cov=ollama_proxy --cov-report=term-missing
 
 ```bash
 docker build -t affine-ollama-proxy .
-docker run --rm -p 8080:8080 --env-file .env affine-ollama-proxy
+docker run --rm -p 8000:8000 --env-file .env affine-ollama-proxy
 ```
 
 The `.dockerignore` file keeps local-only artifacts out of the image.

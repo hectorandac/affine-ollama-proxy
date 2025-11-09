@@ -10,7 +10,7 @@ pytest --cov=ollama_proxy --cov-report=term-missing
 docker build -t ollama-proxy:test .
 
 # Test local Docker image
-docker run --rm -p 8080:8080 --env-file .env ollama-proxy:test
+docker run --rm -p 8000:8000 --env-file .env ollama-proxy:test
 
 # Multi-platform build (like CI does)
 docker buildx build --platform linux/amd64,linux/arm64 -t ollama-proxy:test .
@@ -158,7 +158,7 @@ pytest --cov=ollama_proxy --cov-report=term-missing
 
 # 3. Build and test Docker image
 docker build -t ollama-proxy:dev .
-docker run --rm -p 8080:8080 --env-file .env ollama-proxy:dev
+docker run --rm -p 8000:8000 --env-file .env ollama-proxy:dev
 
 # 4. Commit and push
 git add .
