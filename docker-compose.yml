@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
   ollama-proxy:
-    # Replace with your Harbor registry details
-    image: ${HARBOR_REGISTRY:-harbor.example.com}/${HARBOR_PROJECT:-project}/ollama-proxy:${IMAGE_TAG:-latest}
+    # Pull from Harbor registry
+    image: container.hect.dev/affine/ollama-proxy:${IMAGE_TAG:-latest}
     
     container_name: ollama-proxy
     
