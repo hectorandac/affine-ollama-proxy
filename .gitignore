@@ -3,3 +3,8 @@ __pycache__/
 .coverage
 .env
 *.pyc
+.venv/
+*-env/
+*.egg-info/
+build/
+dist/

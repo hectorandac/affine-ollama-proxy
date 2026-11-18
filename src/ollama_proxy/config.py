@@ -21,7 +21,7 @@ def _comma_separated(value: str | None) -> List[str]:
 class Settings:
     """Runtime configuration loaded from environment variables."""
 
-    upstream: str = os.getenv("UPSTREAM", "http://10.147.20.68:11434")
+    upstream: str = os.getenv("UPSTREAM", "http://localhost:11434")
     api_key: str = os.getenv("PROXY_API_KEY", "ollama-local")
     base_model: str = os.getenv("PROXY_BASE_MODEL", "gpt-oss:20b")
     title_model: str = os.getenv("PROXY_TITLE_MODEL", "granite3.1-moe:1b")

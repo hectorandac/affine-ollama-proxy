@@ -2,7 +2,6 @@
 
 ![Tests](https://github.com/hectorandac/affine-ollama-proxy/workflows/Test%20and%20Coverage/badge.svg)
 ![Docker Build](https://github.com/hectorandac/affine-ollama-proxy/workflows/Docker%20Build%20and%20Push/badge.svg)
-![Coverage](https://img.shields.io/badge/coverage-%E2%86%91%2090%25-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 FastAPI service that speaks the OpenAI Responses, OpenAI Chat Completions and Anthropic Messages APIs while executing the requests against a local Ollama instance. Drop it in front of AFFiNE (or any OpenAI-compatible client) to keep using your own models without sending data to paid SaaS providers.
@@ -19,7 +18,6 @@ FastAPI service that speaks the OpenAI Responses, OpenAI Chat Completions and An
 
 ```
 .
-├── .archive/            # Historical single-file proxy (kept for reference)
 ├── src/ollama_proxy/    # Application package
 ├── tests/               # Pytest suite (>90% coverage)
 ├── Dockerfile
@@ -42,7 +40,6 @@ FastAPI service that speaks the OpenAI Responses, OpenAI Chat Completions and An
 2. **Configuration**
    - Copy `.env.example` to `.env`.
    - Adjust the variables to point at your Ollama host and change the proxy API key.
-   - `.env` already contains the previously hard-coded defaults for convenience and is ignored by git.
 
 3. **Run locally**
    ```bash
@@ -74,13 +71,19 @@ The `.dockerignore` file keeps local-only artifacts out of the image.
 
 | Name | Description | Default (see `.env`) |
 | --- | --- | --- |
-| `UPSTREAM` | Base URL of Ollama (e.g., `http://localhost:11434`) | `http://10.147.20.68:11434` |
+| `UPSTREAM` | Base URL of Ollama (e.g., `http://localhost:11434`) | `http://localhost:11434` |
 | `PROXY_API_KEY` | Shared secret required in `Authorization` or `x-api-key` headers | `ollama-local` |
 | `PROXY_BASE_MODEL` | Default model used for long-form responses | `gpt-oss:20b` |
 | `PROXY_TITLE_MODEL` | Smaller model for title/summarization prompts | `granite3.1-moe:1b` |
 | `PROXY_TIMEOUT` | Request timeout in seconds | `300.0` |
 | `PROXY_CONNECT_TIMEOUT` | Connect timeout in seconds | `10.0` |
 | `PROXY_CORS_ALLOW_ORIGINS` | Comma separated list for CORS | `*` |
+
+## CI
+
+`test-and-coverage.yml` runs pytest with a 90% coverage gate on every push and PR.
+`docker-build-push.yml` builds multi-arch images, signs them with Cosign, attaches an SBOM
+and pushes to a Harbor registry (`HARBOR_USERNAME` and `HARBOR_PASSWORD` secrets).
 
 ## License
 
